@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Category</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
 <h2>Category all</h2>
 <ul>
 {% for cat in category %}
@@ -13,5 +9,4 @@
  <li>Еще нет ни хуа)</li>
 {% endfor %}
 </ul>
-</body>
-</html>
+{% endblock %}
