@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h2>Posts all</h2>
+<ul>
+  {% for post in posts %}
+  <li>{{ post.title }}</li>
+  {% else %}
+  <li>Еще нет ничего</li>
+  {% endfor %}
+</ul>
+
+</body>
+</html>

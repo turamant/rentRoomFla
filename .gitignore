@@ -1,3 +1,3 @@
 venv
 .idea
-sqlite100.db
+app/sqlite100.db
