@@ -1,0 +1,26 @@
+{% extends 'admin/master.html' %}
+
+
+{% block body %}
+
+ <ol>
+    {% for user in all_users %}
+     <li>{{ user.name }}</li>
+
+    {% endfor %}
+</ol>
+
+<ul>
+    {% for room in all_rooms %}
+    <li>{{ room }}</li>
+    {% endfor %}
+</ul>
+
+<ul>
+    {% for reservation in all_reservations %}
+    <li>{{ reservation }} {{ reservation.id }}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock body %}

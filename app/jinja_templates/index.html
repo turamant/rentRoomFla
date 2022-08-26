@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1>Flask Admin</h1>
+<br>
+<a href="{{ url_for('admin.add_data_db') }}">В админку</a>
+
 <h2>Posts all</h2>
 <ul>
   {% for post in posts %}
-  <li>{{ post.title }}</li>
+  <li>{{ post.title }}, {{ post.category }}, время: {{ post.created_on }}</li>
   {% else %}
   <li>Еще нет ничего</li>
   {% endfor %}
 </ul>
+
 {% endblock %}

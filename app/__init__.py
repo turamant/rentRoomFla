@@ -21,3 +21,5 @@ db = SQLAlchemy(app)
 from . import views
 # from . import forum_views
 # from . import admin_views
+
+

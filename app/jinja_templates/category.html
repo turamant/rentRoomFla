@@ -4,7 +4,34 @@
 <h2>Category all</h2>
 <ul>
 {% for cat in category %}
-    <li>{{ cat.name }}</li>
+    <li>{{ cat.name }}, время: {{ cat.created_on }}
+        <ul>
+        {% for city in cat.posts %}
+            <li>{{ city.title }}</li>
+            {% endfor %}
+            </ul>
+    </li>
+{% else %}
+ <li>Еще нет ни хуа)</li>
+{% endfor %}
+</ul>
+
+<h2>Post all</h2>
+<ul>
+{% for post in posts %}
+    {{ post.category.name }}
+    {{ post.tags }}
+    <li>{{ post.title }}, время: {{ post.created_on }}</li>
+{% else %}
+ <li>Еще нет ни хуа)</li>
+{% endfor %}
+</ul>
+
+<h2>Tag all</h2>
+<ul>
+{% for tag in tags %}
+    {{ tag.posts }}
+    <li>{{ tag.name }}, время: {{ tag.created_on }}</li>
 {% else %}
  <li>Еще нет ни хуа)</li>
 {% endfor %}

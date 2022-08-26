@@ -1,8 +1,20 @@
+from flask_admin import Admin, BaseView, expose, AdminIndexView
+from flask_admin.contrib.sqla import ModelView
+
 from app import app, db
 
-from flask import Flask, request, current_app, session, g, make_response, redirect, abort, render_template
+from flask import make_response, redirect, render_template
 
-from app.models import Category, Post
+from app.models import Category, Post, Tag, User, Room, Reservation, Review
+from mimesis import Person, Text
+
+person = Person('ru')
+text = Text('ru')
+
+
+
+
+
 
 
 @app.before_request
@@ -18,13 +30,36 @@ def after_request(response):
 @app.route('/category')
 def category_all():
     category = db.session.query(Category).all()
-    return render_template('category.html', category=category)
-
-
-@app.route('/')
-def index():
     posts = db.session.query(Post).all()
-    return render_template('index.html', posts=posts)
+    tags = db.session.query(Tag).all()
+    return render_template('category.html',
+                           category=category,
+                           posts=posts,
+                           tags=tags)
+
+
+
+@app.get('/')
+def index():
+    return render_template('index.html')
+
+
+class AnyPageView(BaseView):
+    @expose('/')
+    def any_page(self):
+        return self.render('admin/any_page/index.html')
+
+
+class DashBoardView(AdminIndexView):
+    @expose('/')
+    def add_data_db(self):
+        all_users = User.query.all()
+        all_rooms = Room.query.all()
+        all_reservation = Reservation.query.all()
+        return self.render('admin/dashboard_index.html',
+                           all_users=all_users,
+                           all_rooms=all_rooms,
+                           all_reservation=all_reservation)
 
 
 @app.route('/resp/')
@@ -80,4 +115,10 @@ def user_profile(user_id):
 def books(genre):
     return f"All books in {genre} category."
 
+
+admin = Admin(app, name='Моя программа', template_mode='bootstrap3', index_view=DashBoardView(), endpoint='admin')
+admin.add_view(ModelView(User, db.session, name='Пользователь' ))
+admin.add_view(ModelView(Room, db.session, name='Недвижимость'))
+admin.add_view(ModelView(Reservation, db.session, name='Бронирования'))
+admin.add_view(ModelView(Review, db.session, name='Рейтинги'))
 
