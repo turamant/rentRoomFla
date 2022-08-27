@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Детализация рейтингов</h1>
+<br>
+<a href="{{ url_for('admin.add_data_db') }}">В админку</a>
+<h2>Все рейтинги это недвижки</h2>
+<ul>
+    <li>Отзывы рейтинг:
+        {% for review in reservation.reviews %}
+            {{ review }}
+        {% endfor %}
+    </li>
+
+</ul>
+
+{% endblock %}

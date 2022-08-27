@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Управление арендной недвижимостью</h1>
+<br>
+<a href="{{ url_for('admin.add_data_db') }}">В админку</a>
+
+<h2>Рейтинг каждой недвижимости</h2>
+<ul>
+  {% for review in reviews %}
+  <li><a href="{{ url_for('detail_reviews', id=review[0]) }}"> Адрес: {{ review[1] }} </a>Рейтинг: {{ review[2] }}</li>
+  {% else %}
+  <li>Еще нет ничего</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
+from sqlalchemy import func
 
 from app import app, db
 
@@ -12,14 +13,10 @@ person = Person('ru')
 text = Text('ru')
 
 
-
-
-
-
-
 @app.before_request
 def before_request():
     print("before_request() called")
+
 
 @app.after_request
 def after_request(response):
@@ -27,21 +24,73 @@ def after_request(response):
     return response
 
 
-@app.route('/category')
-def category_all():
-    category = db.session.query(Category).all()
-    posts = db.session.query(Post).all()
-    tags = db.session.query(Tag).all()
-    return render_template('category.html',
-                           category=category,
-                           posts=posts,
-                           tags=tags)
-
-
-
 @app.get('/')
 def index():
-    return render_template('index.html')
+    rooms = db.session.query(Room).all()
+    return render_template('index.html', rooms=rooms)
+
+
+@app.route('/avg-reviews/')
+def avg_reviews():
+
+    '''select  room_id, AVG(rating) as avg_score
+    from Reservations INNER JOIN Reviews
+    ON  Reviews.reservation_id = Reservations.id
+    JOIN rooms
+	    ON rooms.id=reservations.room_id
+    GROUP BY room_id HAVING avg_score;
+
+    Rating.query.with_entities(func.avg(Rating.field2).label('average'))
+
+    reviews = db.session.query(Reservation.room_id, func.avg(Review.rating).label('avg_score'))\
+        .join(Review)\
+        .group_by(Reservation.room_id)\
+        .having(func.avg(Review.rating)).all()
+    '''
+    reviews = db.session.query(Reservation.room_id, Room.address, func.avg(Review.rating)).select_from(Reservation)\
+        .join(Review).filter(Review.reservation_id == Reservation.id)\
+        .join(Room).filter(Room.id == Reservation.room_id)\
+        .group_by(Reservation.room_id).having(func.avg(Review.rating)).all()
+    print("......++...", reviews)
+    return render_template('avg_reviews.html', reviews=reviews)
+
+
+@app.route('/detail_reviews/<int:id>/')
+def detail_reviews(id):
+    print("...id..= ", id)
+    reservation = db.session.query(Reservation).get(id)
+    print("....reservation..:>>>..", reservation)
+    return render_template('rating_detail.html', reservation=reservation)
+
+
+
+@app.route('/ratings/')
+def ratings():
+    '''
+    select rating, address from Reviews
+	JOIN Reservations 
+		ON reviews.reservation_id=reservations.id
+	JOIN rooms
+	    ON rooms.id=reservations.room_id;
+    '''
+    ratings = db.session.query(Review.rating, Room.address).select_from(Review).join(Reservation)\
+        .filter(Review.reservation_id == Reservation.id).join(Room).filter(Room.id == Reservation.room_id).all()
+    print("...ratings-room:>>>...", ratings)
+    return render_template('ratings.html', ratings=ratings)
+
+
+@app.route('/all-models/')
+def all_models():
+    users = db.session.query(User).all()
+    rooms = db.session.query(Room).join(User).all()
+    reservations = db.session.query(Reservation).join(Room).join(User).all()
+    print(".....", users)
+    reviews = db.session.query(Review).all()
+    return render_template('all_models.html',
+                           users=users,
+                           rooms=rooms,
+                           reservations=reservations,
+                           reviews=reviews)
 
 
 class AnyPageView(BaseView):

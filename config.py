@@ -7,6 +7,7 @@ class BaseConfig:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a#966really@!defew`232e9875654jklkjj#%key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+
     ##### настройка Flask-Mail #####
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
@@ -19,13 +20,13 @@ class BaseConfig:
 class DevelopementConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEVELOPMENT_DATABASE_URI') or \
-                              'sqlite:///sqlite100.db'
+                              'sqlite:///sqlite101.db'
 
 
 class TestingConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TESTING_DATABASE_URI') or \
-                              'sqlite:///sqlite100.db'
+                              'sqlite:///sqlite101.db'
 
 
 class ProductionConfig(BaseConfig):

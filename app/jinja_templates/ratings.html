@@ -5,10 +5,10 @@
 <br>
 <a href="{{ url_for('admin.add_data_db') }}">В админку</a>
 
-<h2>Вся недвижимость</h2>
+<h2>Рейтинги</h2>
 <ul>
-  {% for room in rooms %}
-  <li>Адрес: {{ room.address }}, Цена: {{ room.price }}, тип: {{ room.home_type }}</li>
+  {% for rat in ratings %}
+  <li>Адресс: {{ rat[1] }}, Райтинг: {{ rat[0] }}</li>
   {% else %}
   <li>Еще нет ничего</li>
   {% endfor %}

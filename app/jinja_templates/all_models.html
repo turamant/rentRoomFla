@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Все пользователи</h2>
+<ul>
+{% for user in users %}
+    <li>Имя: {{ user.name }},
+        Недвижка: {% for room in user.owner_room %}
+                        {{ room }}
+               {% endfor%}
+        Бронирование: {% for res in user.reservations %}
+                            {{ res }}
+                        {% endfor %}
+    </li>
+{% else %}
+ <li>Еще нет ни хуа)</li>
+{% endfor %}
+</ul>
+
+<h2>Вся недвижимость</h2>
+<ul>
+{% for room in rooms %}
+    Владелец: {{ room.user.name }}
+    <li>Адрес: {{ room.address }}, Цена: {{ room.price }},
+    Бронирование:
+        {% for res in room.reservations %}
+            {{ res.room.address }}
+        {% endfor %}
+    </li>
+{% else %}
+ <li>Еще нет ни хуа)</li>
+{% endfor %}
+</ul>
+
+
+
+
+<h2>Все бронирования</h2>
+<ul>
+{% for res in reservations %}
+    Клиент: {{ res.user.name }}
+    Объкт: {{ res.room.address }}
+    <li>Время начало: {{ res.start_date }},
+        время end: {{ res.end_date }},
+        Цена: {{ res.price }}</li>
+    <li>Отзывы рейтинг:
+        {% for review in res.reviews %}
+            {{ review }}
+        {% endfor %}
+    </li>
+{% else %}
+ <li>Еще нет ни хуа)</li>
+{% endfor %}
+</ul>
+
+<h2>Все рейтинги</h2>
+<ul>
+{% for review in reviews %}
+    Цена: {{ review.reservation_id.price }}
+    Бронь: {{ review.reservations.room.address }}
+    <li>Рейтинг: {{ review.rating }}</li>
+{% else %}
+ <li>Еще нет ни хуа)</li>
+{% endfor %}
+</ul>
+{% endblock %}
